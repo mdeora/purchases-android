@@ -33,6 +33,12 @@ jobs:
       - run:
           name: Install danger
           command: |
+            echo "Installing gradle 5.6.2"
+            curl -o gradle.zip -L https://downloads.gradle-dn.com/distributions/gradle-5.6.2-bin.zip
+            sudo mkdir /opt/gradle
+            sudo unzip -d /opt/gradle gradle.zip
+            echo 'export PATH=/opt/gradle/gradle-5.6.2/bin:$PATH' >> ~/.bash_profile
+            rm -rf gradle.zip
             echo "Installing danger"
             sudo npm install -g danger
             git clone https://github.com/danger/kotlin.git --single-branch --depth 1 _danger-kotlin
