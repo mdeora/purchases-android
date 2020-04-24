@@ -39,6 +39,7 @@ jobs:
       - run:
           name: Install danger
           command: |
+             sudo mkdir /opt/gradle
              bash <(sudo curl -s https://raw.githubusercontent.com/danger/kotlin/master/scripts/install.sh)
              source ~/.bash_profile
       - run:
