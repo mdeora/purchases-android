@@ -31,17 +31,20 @@ jobs:
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "purchases/build.gradle" }}
       - android/restore-build-cache
       - run:
+          name: Install danger
+          command: |
+            echo "Installing danger"
+            sudo npm install -g danger
+            git clone https://github.com/danger/kotlin.git --single-branch --depth 1 _danger-kotlin
+            cd _danger-kotlin && make install
+            cd ..
+            rm -rf _danger-kotlin
+      - run:
           name: Run Tests
           command: ./gradlew lint test
       - run:
           name: Test coverage report
           command: ./gradlew testDebugUnitTestCoverage coveralls
-      - run:
-          name: Install danger
-          command: |
-             sudo mkdir /opt/gradle
-             bash <(sudo curl -s https://raw.githubusercontent.com/danger/kotlin/master/scripts/install.sh)
-             source ~/.bash_profile
       - run:
           name: Danger
           command: danger-kotlin ci
