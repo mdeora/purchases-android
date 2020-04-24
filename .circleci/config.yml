@@ -37,9 +37,6 @@ jobs:
           name: Test coverage report
           command: ./gradlew testDebugUnitTestCoverage coveralls
       - run:
-          name: Danger
-          command: danger-kotlin ci
-      - run:
           name: Detekt
           command: ./gradlew detektAll
       - android/save-build-cache
@@ -76,6 +73,9 @@ jobs:
             cd _danger-kotlin && make install
             cd ..
             rm -rf _danger-kotlin
+      - run:
+          name: Danger
+          command: danger-kotlin ci
 
   docs-deploy:
     executor: android-executor
