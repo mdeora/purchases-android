@@ -61,9 +61,8 @@ jobs:
           command: |
             curl -o gradle.zip -L https://downloads.gradle-dn.com/distributions/gradle-5.6.2-bin.zip
             sudo unzip -d /opt/gradle gradle.zip
-            echo 'export PATH=/opt/gradle/gradle-5.6.2/bin:$PATH' >> ~/.bash_profile
+            export PATH=/opt/gradle/gradle-5.6.2/bin:$PATH
             rm -rf gradle.zip
-            source ~/.bash_profile
       - run:
           name: Install danger
           command: |
