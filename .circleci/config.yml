@@ -36,6 +36,9 @@ jobs:
       - run:
           name: Test coverage report
           command: ./gradlew testDebugUnitTestCoverage coveralls
+      - run:
+          name: Detekt
+          command: ./gradlew detektAll
       - android/save-build-cache
       - store_artifacts:
           path: purchases/build/reports
