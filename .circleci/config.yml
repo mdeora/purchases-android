@@ -16,6 +16,11 @@ jobs:
     steps:
       - checkout
       - android/accept-licenses
+      - run:
+          name: Install danger
+          command: |
+             bash <(curl -s https://raw.githubusercontent.com/danger/kotlin/master/scripts/install.sh)
+             source ~/.bash_profile
   test:
     executor: android-executor
     steps:
@@ -36,6 +41,9 @@ jobs:
       - run:
           name: Test coverage report
           command: ./gradlew testDebugUnitTestCoverage coveralls
+      - run:
+          name: Danger
+          command: danger-kotlin ci
       - run:
           name: Detekt
           command: ./gradlew detektAll
