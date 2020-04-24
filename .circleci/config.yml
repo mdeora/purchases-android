@@ -9,6 +9,10 @@ executors:
     environment:
       JVM_OPTS: -Xmx3200m
       CIRCLE_JDK_VERSION: oraclejdk8
+  gradle-executor:
+    docker:
+      - image: cimg/openjdk:8.0-node
+    working_directory: ~/purchases-android
 
 jobs:
   build:
@@ -46,7 +50,7 @@ jobs:
           path: purchases/build/test-results
 
   danger:
-    executor: android-executor
+    executor: gradle-executor
     steps:
       - checkout
       - run:
@@ -56,13 +60,13 @@ jobs:
             sudo unzip -d /usr/local/ kotlin-compiler.zip
             echo 'PATH=/usr/local/kotlinc/bin:$PATH' >> ~/.bash_profile
             rm -rf kotlin-compiler.zip
-      - run:
-          name: Installing gradle 5.6.2
-          command: |
-            curl -o gradle.zip -L https://downloads.gradle-dn.com/distributions/gradle-5.6.2-bin.zip
-            sudo unzip -d /opt/gradle gradle.zip
-            export PATH=/opt/gradle/gradle-5.6.2/bin:$PATH
-            rm -rf gradle.zip
+#      - run:
+#          name: Installing gradle 5.6.2
+#          command: |
+#            curl -o gradle.zip -L https://downloads.gradle-dn.com/distributions/gradle-5.6.2-bin.zip
+#            sudo unzip -d /opt/gradle gradle.zip
+#            export PATH=/opt/gradle/gradle-5.6.2/bin:$PATH
+#            rm -rf gradle.zip
       - run:
           name: Install danger
           command: |
