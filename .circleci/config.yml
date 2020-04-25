@@ -36,9 +36,9 @@ jobs:
       - run:
           name: Test coverage report
           command: ./gradlew testDebugUnitTestCoverage coveralls
-      - run:
-          name: Detekt
-          command: ./gradlew detektAll
+#      - run:
+#          name: Detekt
+#          command: ./gradlew detektAll
       - run:
           name: Bundle install
           command: bundle install
