@@ -9,10 +9,6 @@ executors:
     environment:
       JVM_OPTS: -Xmx3200m
       CIRCLE_JDK_VERSION: oraclejdk8
-  gradle-executor:
-    docker:
-      - image: cimg/openjdk:8.0-node
-    working_directory: ~/purchases-android
 
 jobs:
   build:
@@ -50,34 +46,15 @@ jobs:
           path: purchases/build/test-results
 
   danger:
-    executor: gradle-executor
+    executor: android-executor
     steps:
       - checkout
       - run:
-          name: Installing kotlin compiler 1.3.70
-          command: |
-            curl -o kotlin-compiler.zip -L https://github.com/JetBrains/kotlin/releases/download/v1.3.70/kotlin-compiler-1.3.70.zip
-            sudo unzip -d /usr/local/ kotlin-compiler.zip
-            echo 'PATH=/usr/local/kotlinc/bin:$PATH' >> ~/.bash_profile
-            rm -rf kotlin-compiler.zip
-#      - run:
-#          name: Installing gradle 5.6.2
-#          command: |
-#            curl -o gradle.zip -L https://downloads.gradle-dn.com/distributions/gradle-5.6.2-bin.zip
-#            sudo unzip -d /opt/gradle gradle.zip
-#            export PATH=/opt/gradle/gradle-5.6.2/bin:$PATH
-#            rm -rf gradle.zip
-      - run:
-          name: Install danger
-          command: |
-            sudo npm install -g danger
-            git clone https://github.com/danger/kotlin.git --single-branch --depth 1 _danger-kotlin
-            cd _danger-kotlin && make install
-            cd ..
-            rm -rf _danger-kotlin
+          name: Bundle install
+          command: bundle install
       - run:
           name: Danger
-          command: danger-kotlin ci
+          command: bundle exec danger
 
   docs-deploy:
     executor: android-executor
