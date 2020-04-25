@@ -39,22 +39,17 @@ jobs:
       - run:
           name: Detekt
           command: ./gradlew detektAll
-      - android/save-build-cache
-      - store_artifacts:
-          path: purchases/build/reports
-      - store_test_results:
-          path: purchases/build/test-results
-
-  danger:
-    executor: android-executor
-    steps:
-      - checkout
       - run:
           name: Bundle install
           command: bundle install
       - run:
           name: Danger
           command: bundle exec danger
+      - android/save-build-cache
+      - store_artifacts:
+          path: purchases/build/reports
+      - store_test_results:
+          path: purchases/build/test-results
 
   docs-deploy:
     executor: android-executor
@@ -108,9 +103,6 @@ workflows:
   test-assemble-deploy-docs:
     jobs:
       - build
-      - danger:
-          requires:
-            - build
       - test:
           requires:
             - build

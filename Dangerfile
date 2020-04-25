@@ -8,6 +8,16 @@ warn("PR is classed as Work in Progress") if github.pr_title.include? "[WIP]"
 # Warn when there is a big PR
 warn("Big PR") if git.lines_of_code > 500
 
-# Don't let testing shortcuts get into master by accident
-fail("fdescribe left in tests") if `grep -r fdescribe specs/ `.length > 1
-fail("fit left in tests") if `grep -r fit specs/ `.length > 1
+junit_tests_dir = "purchases/build/reports/**/*.xml"
+Dir[junit_tests_dir].each do |file_name|
+  junit.parse file_name
+  junit.show_skipped_tests = true
+  junit.report
+end
+
+all_source_files = danger.git.modified_files + danger.git.added_files
+
+changelog_changed = all_source_files.include?("CHANGELOG.md")
+is_trivial = danger.github.pr_title.include?("#trivial")
+
+warn("Any changes to library code should be reflected in the Changelog.\n\nPlease consider adding a note there.") if (!is_trivial && !changelog_changed)
