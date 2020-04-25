@@ -8,6 +8,8 @@ warn("PR is classed as Work in Progress") if github.pr_title.include? "[WIP]"
 # Warn when there is a big PR
 warn("Big PR") if git.lines_of_code > 500
 
+kotlin_detekt.detekt
+
 junit_tests_dir = "purchases/build/reports/**/*.xml"
 Dir[junit_tests_dir].each do |file_name|
   junit.parse file_name
@@ -21,3 +23,5 @@ changelog_changed = all_source_files.include?("CHANGELOG.md")
 is_trivial = danger.github.pr_title.include?("#trivial")
 
 warn("Any changes to library code should be reflected in the Changelog.\n\nPlease consider adding a note there.") if (!is_trivial && !changelog_changed)
+
+lgtm.check_lgtm 
